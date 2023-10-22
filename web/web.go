@@ -1,10 +1,10 @@
 package web
 
 import (
-	"LengthCal/server"
 	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
+	"pubg-length-caluate/server"
 	"sync"
 )
 

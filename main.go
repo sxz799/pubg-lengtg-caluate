@@ -1,8 +1,8 @@
 package main
 
 import (
-	"LengthCal/server"
-	"LengthCal/web"
+	"pubg-length-caluate/server"
+	"pubg-length-caluate/web"
 )
 
 func main() {

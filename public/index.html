@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="">
 <head>
     <title>PUBG火箭筒距离计算</title>
 </head>
@@ -8,26 +8,22 @@
 <div class="centered-content" id="data"></div>
 
 <script>
-    var hostName = window.location.hostname
-    var socket = new WebSocket("ws://" + hostName + ":3000/ws");
+    const hostName = window.location.hostname;
+    const socket = new WebSocket("ws://" + hostName + ":3000/ws");
     socket.onmessage = function (event) {
         document.getElementById("data").innerHTML = event.data;
     };
 </script>
 
 <style>
-
-
     .centered-content {
         font-size: 50px;
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        /* 样式你的内容 */
     }
 
 </style>
-
 </body>
 </html>
