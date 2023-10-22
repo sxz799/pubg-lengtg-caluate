@@ -12,6 +12,7 @@ type Location struct {
 	Y float64
 }
 
+var MapOpen = false
 var ScreenDPI float64
 var NeedCal bool
 
@@ -27,7 +28,6 @@ func init() {
 
 func Run() {
 	var lastOperation Location
-	mapOpen := false
 	calLength := func(operation, lastOperation Location) {
 		x := operation.X - lastOperation.X
 		y := operation.Y - lastOperation.Y
@@ -35,7 +35,7 @@ func Run() {
 	}
 	robotgo.EventHook(hook.MouseDown, []string{}, func(event hook.Event) {
 		var operation Location
-		if event.Button == 2 && mapOpen {
+		if event.Button == 2 && MapOpen {
 			operation.X = float64(event.X) / ScreenDPI
 			operation.Y = float64(event.Y) / ScreenDPI
 			if NeedCal {
@@ -45,17 +45,6 @@ func Run() {
 			}
 			lastOperation = operation
 			NeedCal = !NeedCal
-		}
-	})
-	robotgo.EventHook(hook.KeyDown, []string{}, func(event hook.Event) {
-		if event.Keychar == 91 {
-			mapOpen = true
-			NeedCal = false
-			ResultChannel <- "计算已开启!"
-		}
-		if event.Keychar == 93 {
-			mapOpen = false
-			ResultChannel <- "计算已关闭!"
 		}
 	})
 

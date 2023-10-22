@@ -55,9 +55,20 @@ func handleWebSocket(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func handleStart(w http.ResponseWriter, r *http.Request) {
+	server.ResultChannel <- "计算已开启!"
+	server.MapOpen = true
+}
+func handleStop(w http.ResponseWriter, r *http.Request) {
+	server.ResultChannel <- "计算已关闭!"
+	server.MapOpen = false
+}
+
 func InitSocket() {
 	http.HandleFunc("/ws", handleWebSocket)
 	http.Handle("/", http.FileServer(http.Dir("public"))) // 静态文件服务器
+	http.HandleFunc("/start", handleStart)                // 静态文件服务器
+	http.HandleFunc("/stop", handleStop)                  // 静态文件服务器
 
 	log.Println("服务器启动，监听端口 :3000")
 	err := http.ListenAndServe(":3000", nil)

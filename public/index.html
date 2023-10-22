@@ -1,29 +1,51 @@
 <!DOCTYPE html>
 <html lang="">
 <head>
-    <title>PUBG火箭筒距离计算</title>
+    <!-- Import style -->
+    <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css"/>
+    <!-- Import Vue 3 -->
+    <script src="https://unpkg.com/vue@3"></script>
+    <!-- Import component library -->
+    <script src="https://unpkg.com/element-plus"></script>
 </head>
 <body>
 
-<div class="centered-content" id="data"></div>
+<div id="app">
+    <el-card>
+        <el-tag  type="success">{{mainMsg}}</el-tag>
+        <el-button type="success" @click="startCal()">开始</el-button>
+        <el-button type="danger"  @click="stopCal()">暂停</el-button>
+    </el-card>
+</div>
+
 
 <script>
-    const hostName = window.location.hostname;
-    const socket = new WebSocket("ws://" + hostName + ":3000/ws");
+    const App = {
+        data() {
+            return {
+                hostName:"",
+                mainMsg: "欢迎使用PUBG地图计算工具!",
+            };
+        },
+        methods:{
+            startCal(){
+                console.log(this.hostName)
+                fetch('http://'+this.hostName+'/start')
+            },
+            stopCal(){
+                fetch('http://'+this.hostName+'/stop')
+            },
+        }
+    };
+    const app = Vue.createApp(App);
+    app.use(ElementPlus);
+    const vm=app.mount("#app");
+    vm.hostName = window.location.hostname+':'+ window.location.port;
+    const socket = new WebSocket("ws://" + vm.hostName + "/ws");
     socket.onmessage = function (event) {
-        document.getElementById("data").innerHTML = event.data;
+        vm.mainMsg=event.data
     };
 </script>
 
-<style>
-    .centered-content {
-        font-size: 50px;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-
-</style>
 </body>
 </html>
