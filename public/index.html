@@ -12,9 +12,14 @@
 
 <div id="app">
     <el-card>
-        <el-tag  type="success">{{mainMsg}}</el-tag>
-        <el-button type="success" @click="startCal()">开始</el-button>
-        <el-button type="danger"  @click="stopCal()">暂停</el-button>
+        <el-tag size="large" type="success">{{mainMsg}}</el-tag>
+        <el-switch
+                inline-prompt
+                v-model="active"
+                @change="switchCal"
+                active-text="开启"
+                inactive-text="停止"
+        />
     </el-card>
 </div>
 
@@ -23,17 +28,18 @@
     const App = {
         data() {
             return {
+                active: false,
                 hostName:"",
-                mainMsg: "欢迎使用PUBG地图计算工具!",
+                mainMsg: "",
             };
         },
         methods:{
-            startCal(){
-                console.log(this.hostName)
-                fetch('http://'+this.hostName+'/start')
-            },
-            stopCal(){
-                fetch('http://'+this.hostName+'/stop')
+            switchCal(value){
+                if(value){
+                    fetch('http://'+this.hostName+'/start')
+                }else{
+                    fetch('http://'+this.hostName+'/stop')
+                }
             },
         }
     };

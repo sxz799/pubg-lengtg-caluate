@@ -1,10 +1,12 @@
 package web
 
 import (
+	"fmt"
 	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
 	"pubg-length-caluate/server"
+	"pubg-length-caluate/utils"
 	"sync"
 )
 
@@ -21,6 +23,7 @@ func handleWebSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer conn.Close()
+	server.ResultChannel <- "欢迎使用pubg火箭筒距离计算助手!"
 
 	closeChannel := make(chan struct{})
 	defer close(closeChannel)
@@ -36,6 +39,7 @@ func handleWebSocket(w http.ResponseWriter, r *http.Request) {
 				if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
 					log.Printf("Error reading from WebSocket: %v", err)
 				}
+				<-closeChannel
 				return
 			}
 		}
@@ -69,10 +73,11 @@ func InitSocket() {
 	http.Handle("/", http.FileServer(http.Dir("public"))) // 静态文件服务器
 	http.HandleFunc("/start", handleStart)                // 静态文件服务器
 	http.HandleFunc("/stop", handleStop)                  // 静态文件服务器
-
-	log.Println("服务器启动，监听端口 :3000")
+	ip, _ := utils.GetLocalIP()
+	fmt.Println("服务器启动http://" + ip + ":3000/")
 	err := http.ListenAndServe(":3000", nil)
 	if err != nil {
 		log.Fatal("服务器启动失败: ", err)
 	}
+
 }
