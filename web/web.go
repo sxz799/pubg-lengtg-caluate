@@ -61,11 +61,11 @@ func handleWebSocket(w http.ResponseWriter, r *http.Request) {
 
 func handleStart(w http.ResponseWriter, r *http.Request) {
 	server.ResultChannel <- "计算已开启!"
-	server.MapOpen = true
+	server.CalculateOpen = true
 }
 func handleStop(w http.ResponseWriter, r *http.Request) {
 	server.ResultChannel <- "计算已关闭!"
-	server.MapOpen = false
+	server.CalculateOpen = false
 }
 
 func InitSocket() {
