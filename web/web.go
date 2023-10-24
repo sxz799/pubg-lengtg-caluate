@@ -5,8 +5,8 @@ import (
 	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
-	"pubg-length-caluate/server"
-	"pubg-length-caluate/utils"
+	"pubg-length-calculate/server"
+	"pubg-length-calculate/utils"
 	"sync"
 )
 
