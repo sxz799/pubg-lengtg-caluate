@@ -75,7 +75,6 @@ func handleConfig(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.Write([]byte("参数错误"))
 	} else {
-		log.Println(float)
 		server.CalBaseLength = float / 100 * 113
 		w.Write([]byte("更新成功"))
 	}
@@ -89,7 +88,7 @@ func InitSocket() {
 	http.HandleFunc("/stop", handleStop)                  // 静态文件服务器
 	http.HandleFunc("/config", handleConfig)              // 静态文件服务器
 	ip, _ := utils.GetLocalIP()
-	fmt.Println("服务器启动http://" + ip + ":3000/")
+	fmt.Println("服务器启动,可使用手机打开http://" + ip + ":3000/进行使用!")
 	err := http.ListenAndServe(":3000", nil)
 	if err != nil {
 		log.Fatal("服务器启动失败: ", err)

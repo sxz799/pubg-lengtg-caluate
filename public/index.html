@@ -3,6 +3,7 @@
 
 <head>
     <title>PUBG迫击炮助手</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="./css/elementPlus2.4-index.css"/>
     <script src="./js/vue.global.js"></script>
@@ -16,7 +17,7 @@
         <el-card class="box-card">
             <template #header>
                 <div class="card-header">
-                    <p style="font-size: 20px">{{mainMsg}}</p>
+                    <p style="font-size: 20px;color: #79bbff">{{mainMsg}}</p>
                     <el-switch inline-prompt v-model="active" @change="switchCal" active-text="开启"
                                inactive-text="停止"/>
                 </div>
@@ -32,13 +33,13 @@
         </el-card>
         <el-dialog
                 v-model="dialogVisible"
-                title="距离校准页面"
-                width="30%">
+                title="距离校准"
+                width="350px">
             <el-form
                     ref="form"
                     :model="form"
                     class="demo-ruleForm">
-                <el-form-item label="显示的距离" prop="calBaseLength">
+                <el-form-item label="显示的距离:" prop="calBaseLength">
                     <el-input v-model="form.calBaseLength" autocomplete="off"/>
                 </el-form-item>
                 <el-form-item>
@@ -47,7 +48,16 @@
                 </el-form-item>
             </el-form>
             <el-tag>
-                游戏地图放大到第二大级别,选择最小的格子计算出距离,如果不是100就把结果填入上方输入框后提交
+                游戏地图放大到第二大级别
+            </el-tag>
+            <el-tag type="success">
+                选择最小的格子计算出距离
+            </el-tag>
+            <el-tag type="info">
+                如果不是100就把结果填入输入框
+            </el-tag>
+            <el-tag type="error">
+                最后提交即可
             </el-tag>
         </el-dialog>
     </div>
@@ -80,7 +90,7 @@
                 this.fetchUrl('http://' + this.hostName + '/config?calBaseLength=100')
                 this.dialogVisible = false
             },
-            fetchUrl(url){
+            fetchUrl(url) {
                 fetch(url).then(response => {
                     if (!response.ok) {
                         this.$message({
@@ -88,7 +98,8 @@
                             type: 'success'
                         });
                     }
-                    return response.text()}).then(data => {
+                    return response.text()
+                }).then(data => {
                     this.$message({
                         message: data,
                         type: 'success'
@@ -130,6 +141,7 @@
     .item {
         margin-bottom: 18px;
     }
+
 </style>
 
 </body>
