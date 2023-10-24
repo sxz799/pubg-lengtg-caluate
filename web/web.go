@@ -23,8 +23,6 @@ func handleWebSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer conn.Close()
-	server.ResultChannel <- "欢迎使用pubg火箭筒距离计算助手!"
-
 	closeChannel := make(chan struct{})
 	defer close(closeChannel)
 
