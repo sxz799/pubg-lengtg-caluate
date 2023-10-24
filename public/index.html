@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <!-- Import style -->
     <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css"/>
     <!-- Import Vue 3 -->
@@ -9,37 +11,30 @@
     <script src="https://unpkg.com/element-plus"></script>
 </head>
 <body>
-
+<div class="centered-container">
 <div id="app">
-    <el-container>
-        <el-aside width="25%"></el-aside>
-        <el-main>
-
-
-                    <el-card class="box-card">
-                        <template #header>
-                            <div class="card-header">
-                                <p style="font-size: 28px">{{mainMsg}}</p>
-                                <el-switch
-                                        inline-prompt
-                                        v-model="active"
-                                        @change="switchCal"
-                                        active-text="开启"
-                                        inactive-text="停止"
-                                />
-                            </div>
-                        </template>
-
-                    </el-card>
-
-
-
-        </el-main>
-        <el-aside width="25%"></el-aside>
-    </el-container>
+    <el-card class="box-card">
+        <template #header>
+            <div class="card-header">
+                <p style="font-size: 28px">{{mainMsg}}</p>
+                <el-switch
+                        inline-prompt
+                        v-model="active"
+                        @change="switchCal"
+                        active-text="开启"
+                        inactive-text="停止"
+                />
+            </div>
+        </template>
+        <div class="text item">
+            1.右上角开关为全局开关<br>
+            2.开启后打开游戏地图放大到第二大级别<br>
+            3.按住alt键鼠标右键点击地图上两个点后会显示计算结果(也就是游戏中的拉线)<br>
+        </div>
+    </el-card>
 
 </div>
-
+</div>
 
 <script>
     const App = {
@@ -71,12 +66,32 @@
 </script>
 
 <style>
+    .centered-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; /* 使容器占满整个视口高度 */
+    }
     .card-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
     }
+
+    .text {
+        font-size: 14px;
+    }
+
+    .item {
+        margin-bottom: 18px;
+    }
+
+    .box-card {
+        width: 480px;
+    }
+
 </style>
 
 </body>
 </html>
+
