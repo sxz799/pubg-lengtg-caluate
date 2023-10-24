@@ -11,10 +11,11 @@ jobs:
           uses: actions/setup-go@v3
           with:
             go-version: 1.21
-        - name: Install GCC
-          uses: egor-tensin/setup-mingw@v1
+
+        - name: Set up MinGW
+          uses: egor-tensin/setup-mingw@v2
           with:
-            arch: x86_64
+            platform: x64
             version: 8.1.0
         - name: Build
           run: go env && go build -o pubg-calculate-helper.exe
@@ -23,6 +24,7 @@ jobs:
             mkdir pubg-calculate-helper
             mv pubg-calculate-helper.exe pubg-calculate-helper/
             mv public/ pubg-calculate-helper/
+
         - name: Upload artifact
           uses: actions/upload-artifact@v2
           with:
