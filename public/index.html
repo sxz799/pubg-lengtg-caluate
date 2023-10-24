@@ -1,40 +1,56 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="zh">
+
 <head>
+    <title>PUBG迫击炮助手</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Import style -->
-    <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css"/>
-    <!-- Import Vue 3 -->
-    <script src="https://unpkg.com/vue@3"></script>
-    <!-- Import component library -->
-    <script src="https://unpkg.com/element-plus"></script>
+    <link rel="stylesheet" href="./css/elementPlus2.4-index.css"/>
+    <script src="./js/vue.global.js"></script>
+    <script src="./js/elementPlus2.4-index.full.js"></script>
+    <link rel="icon" type="image/png" href="./img/yjtp.png">
 </head>
+
 <body>
 <div class="centered-container">
-<div id="app">
-    <el-card class="box-card">
-        <template #header>
-            <div class="card-header">
-                <p style="font-size: 20px">{{mainMsg}}</p>
-                <el-switch
-                        inline-prompt
-                        v-model="active"
-                        @change="switchCal"
-                        active-text="开启"
-                        inactive-text="停止"
-                />
+    <div id="app">
+        <el-card class="box-card">
+            <template #header>
+                <div class="card-header">
+                    <p style="font-size: 20px">{{mainMsg}}</p>
+                    <el-switch inline-prompt v-model="active" @change="switchCal" active-text="开启"
+                               inactive-text="停止"/>
+                </div>
+            </template>
+            <div class="text item">
+                欢迎使用PUBG迫击炮距离计算助手!<br>
+                1.右上角开关为全局开关<br>
+                2.开启后打开游戏地图放大到第二大级别<br>
+                3.按住alt键同时鼠标右键点击地图上两个点后会显示计算结果<br>
+                4.初次使用时请先进训练场调试距离校准<br>
             </div>
-        </template>
-        <div class="text item">
-            欢迎使用PUBG迫击炮距离计算助手!<br>
-            1.右上角开关为全局开关<br>
-            2.开启后打开游戏地图放大到第二大级别<br>
-            3.按住alt键同时鼠标右键点击地图上两个点后会显示计算结果<br>
-            4.也就是游戏中标记移动轨迹<br>
-        </div>
-    </el-card>
-
-</div>
+            <el-button @click="()=>{dialogVisible=true}">校准</el-button>
+        </el-card>
+        <el-dialog
+                v-model="dialogVisible"
+                title="距离校准页面"
+                width="30%">
+            <el-form
+                    ref="form"
+                    :model="form"
+                    class="demo-ruleForm">
+                <el-form-item label="显示的距离" prop="calBaseLength">
+                    <el-input v-model="form.calBaseLength" autocomplete="off"/>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="submitForm()">提交</el-button>
+                    <el-button @click="resetForm()">重置</el-button>
+                </el-form-item>
+            </el-form>
+            <el-tag>
+                游戏地图放大到第二大级别,选择最小的格子计算出距离,如果不是100就把结果填入上方输入框后提交
+            </el-tag>
+        </el-dialog>
+    </div>
 </div>
 
 <script>
@@ -42,27 +58,53 @@
         data() {
             return {
                 active: false,
-                hostName:"",
+                hostName: "",
                 mainMsg: "",
+                dialogVisible: false,
+                form: {},
             };
         },
-        methods:{
-            switchCal(value){
-                if(value){
-                    fetch('http://'+this.hostName+'/start')
-                }else{
-                    fetch('http://'+this.hostName+'/stop')
+        methods: {
+            switchCal(value) {
+                if (value) {
+                    fetch('http://' + this.hostName + '/start')
+                } else {
+                    fetch('http://' + this.hostName + '/stop')
                 }
             },
+            submitForm() {
+                this.fetchUrl('http://' + this.hostName + '/config?calBaseLength=' + this.form.calBaseLength)
+                this.dialogVisible = false
+            },
+            resetForm() {
+                this.fetchUrl('http://' + this.hostName + '/config?calBaseLength=100')
+                this.dialogVisible = false
+            },
+            fetchUrl(url){
+                fetch(url).then(response => {
+                    if (!response.ok) {
+                        this.$message({
+                            message: '网络请求失败',
+                            type: 'success'
+                        });
+                    }
+                    return response.text()}).then(data => {
+                    this.$message({
+                        message: data,
+                        type: 'success'
+                    });
+                })
+            }
+
         }
     };
     const app = Vue.createApp(App);
     app.use(ElementPlus);
-    const vm=app.mount("#app");
-    vm.hostName = window.location.hostname+':'+ window.location.port;
+    const vm = app.mount("#app");
+    vm.hostName = window.location.hostname + ':' + window.location.port;
     const socket = new WebSocket("ws://" + vm.hostName + "/ws");
     socket.onmessage = function (event) {
-        vm.mainMsg=event.data
+        vm.mainMsg = event.data
     };
 </script>
 
@@ -71,8 +113,10 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh; /* 使容器占满整个视口高度 */
+        height: 100vh;
+        /* 使容器占满整个视口高度 */
     }
+
     .card-header {
         display: flex;
         justify-content: space-between;
@@ -89,5 +133,5 @@
 </style>
 
 </body>
-</html>
 
+</html>

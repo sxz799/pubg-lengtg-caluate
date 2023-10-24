@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"pubg-length-calculate/server"
 	"pubg-length-calculate/utils"
+	"strconv"
 	"sync"
 )
 
@@ -66,11 +67,27 @@ func handleStop(w http.ResponseWriter, r *http.Request) {
 	server.CalculateOpen = false
 }
 
+func handleConfig(w http.ResponseWriter, r *http.Request) {
+	//获取请求参数
+	r.ParseForm()
+	calBaseLength := r.Form.Get("calBaseLength")
+	float, err := strconv.ParseFloat(calBaseLength, 64)
+	if err != nil {
+		w.Write([]byte("参数错误"))
+	} else {
+		log.Println(float)
+		server.CalBaseLength = float / 100 * 113
+		w.Write([]byte("更新成功"))
+	}
+
+}
+
 func InitSocket() {
 	http.HandleFunc("/ws", handleWebSocket)
 	http.Handle("/", http.FileServer(http.Dir("public"))) // 静态文件服务器
 	http.HandleFunc("/start", handleStart)                // 静态文件服务器
 	http.HandleFunc("/stop", handleStop)                  // 静态文件服务器
+	http.HandleFunc("/config", handleConfig)              // 静态文件服务器
 	ip, _ := utils.GetLocalIP()
 	fmt.Println("服务器启动http://" + ip + ":3000/")
 	err := http.ListenAndServe(":3000", nil)

@@ -10,6 +10,7 @@ import (
 
 var CalculateOpen = false
 var ResultChannel chan string
+var CalBaseLength = 113.0
 
 func Run() {
 	ResultChannel = make(chan string, 10)
@@ -26,7 +27,7 @@ func Run() {
 	calLength := func(point, lastPoint Point) {
 		x := point.X - lastPoint.X
 		y := point.Y - lastPoint.Y
-		ResultChannel <- fmt.Sprintf("当前距离为 %f 米", math.Hypot(x, y)/113*100)
+		ResultChannel <- fmt.Sprintf("当前距离为 %f 米", math.Hypot(x, y)/CalBaseLength*100)
 	}
 	robotgo.EventHook(hook.MouseDown, []string{}, func(event hook.Event) {
 		var point Point
