@@ -45,13 +45,13 @@ func Run() {
 
 	robotgo.EventHook(hook.KeyHold, []string{}, func(event hook.Event) {
 		if event.Keycode == 56 {
-			CalculateOpen, altPress = true, true
+			altPress = true
 		}
 	})
 
 	robotgo.EventHook(hook.KeyUp, []string{}, func(event hook.Event) {
 		if event.Keycode == 56 {
-			CalculateOpen, altPress = false, false
+			altPress = false
 		}
 	})
 

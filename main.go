@@ -1,8 +1,8 @@
 package main
 
 import (
-	"pubg-length-caluate/server"
-	"pubg-length-caluate/web"
+	"pubg-length-calculate/server"
+	"pubg-length-calculate/web"
 )
 
 func main() {

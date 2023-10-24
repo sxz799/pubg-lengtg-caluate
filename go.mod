@@ -1,4 +1,4 @@
-module pubg-length-caluate
+module pubg-length-calculate
 
 go 1.18
 
