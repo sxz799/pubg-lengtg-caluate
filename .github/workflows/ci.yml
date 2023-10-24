@@ -1,0 +1,30 @@
+name: CI
+on:
+  push:
+    branches: [main]
+jobs:
+    build:
+        runs-on: windows-latest
+        steps:
+        - uses: actions/checkout@v2
+        - name: Set up Go
+            uses: actions/setup-go@v2
+            with:
+            go-version: 1.21
+        - name: Build
+            run: go build -o pubg-calculate-helper.exe
+        - name: Move  Files
+          run: |
+            mkdir pubg-calculate-helper
+            mv pubg-calculate-helper.exe pubg-calculate-helper/
+            mv public/ pubg-calculate-helper/
+        - name: Upload artifact
+          uses: actions/upload-artifact@v2
+          with:
+            name: pubg-calculate-helper-artifact
+            path: ${{ github.workspace }}/pubg-calculate-helper
+
+        - name: Download a Build Artifact
+          uses: actions/download-artifact@v2.1.1
+          with:
+            name: pubg-calculate-helper-artifact
